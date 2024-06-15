@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -11,19 +10,16 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin {
   PageController _pageController = PageController();
 
-// To call the json file we are first initilaizing it
-
-// Imp step to take json file in our project
   List songs = []; // List to hold songs data
 
+  ScrollController _scrollController = ScrollController();
+  late TabController _tabController;
+
   void readData() async {
-    // Json is in string format, so we have to decode it
-    await DefaultAssetBundle.of(context)
-        .loadString("json/songs.json")
-        .then((s) {
+    await DefaultAssetBundle.of(context).loadString("json/songs.json").then((s) {
       setState(() {
         songs = json.decode(s); // Decode JSON string into List
       });
@@ -33,7 +29,8 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    readData(); // Call readData() in initState to load data when the widget initializes
+    _tabController = TabController(length: 3, vsync: this);
+    readData();
   }
 
   @override
@@ -64,7 +61,7 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
             ),
-            SizedBox(height: 20), // Added SizedBox for spacing
+            SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.only(left: 20),
               child: Text(
@@ -72,7 +69,7 @@ class _HomepageState extends State<Homepage> {
                 style: TextStyle(fontSize: 30),
               ),
             ),
-            SizedBox(
+             SizedBox(
               height: 20,
             ),
             Container(
@@ -93,6 +90,141 @@ class _HomepageState extends State<Homepage> {
                       ),
                     );
                   },
+                ),
+              ),
+            ),
+            // Bcoz everything inside it will be scrollable and so   we used NestedScrollView
+      // Expanded is used as it should cover all the remaining space
+            Expanded(
+              child: NestedScrollView(
+                controller: _scrollController,
+                headerSliverBuilder: (BuildContext context, bool isScroll) {
+                  return [
+                    SliverAppBar(
+                      pinned: true,
+                        backgroundColor: Colors.white,
+                      bottom: PreferredSize(
+                        preferredSize: Size.fromHeight(50),
+                        child: Container(
+                          margin: const EdgeInsets.all(0),
+                          child: TabBar(
+                            indicatorPadding: const EdgeInsets.all(0),
+                            indicatorSize: TabBarIndicatorSize.label,
+                            labelPadding: const EdgeInsets.all(0),
+                            controller: _tabController,
+                            isScrollable: true,
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  blurRadius: 7,
+                                  offset: Offset(0, 0),
+                                )
+                              ],
+                            ),
+                            tabs: [
+                              Container(
+                                width: 120,
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    "Tab 1",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.yellow,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      blurRadius: 7,
+                                      offset: Offset(0, 0),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: 120,
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    "Tab 2",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.red,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      blurRadius: 7,
+                                      offset: Offset(0, 0),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              Container(
+                                width: 120,
+                                height: 50,
+                                child: Center(
+                                  child: Text(
+                                    "Tab 3",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.blue,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.3),
+                                      blurRadius: 7,
+                                      offset: Offset(0, 0),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    ListView.builder(
+                      itemCount: 20,
+                      itemBuilder: (context, index) => ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                        ),
+                        title: Text("Item $index"),
+                      ),
+                    ),
+                    ListView.builder(
+                      itemCount: 20,
+                      itemBuilder: (context, index) => ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                        ),
+                        title: Text("Item $index"),
+                      ),
+                    ),
+                    ListView.builder(
+                      itemCount: 20,
+                      itemBuilder: (context, index) => ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor: Colors.grey,
+                        ),
+                        title: Text("Item $index"),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
