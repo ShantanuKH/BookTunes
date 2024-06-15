@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_ebook_app/tabs.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -10,7 +10,8 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin {
+class _HomepageState extends State<Homepage>
+    with SingleTickerProviderStateMixin {
   PageController _pageController = PageController();
 
   List songs = []; // List to hold songs data
@@ -19,7 +20,9 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
   late TabController _tabController;
 
   void readData() async {
-    await DefaultAssetBundle.of(context).loadString("json/songs.json").then((s) {
+    await DefaultAssetBundle.of(context)
+        .loadString("json/songs.json")
+        .then((s) {
       setState(() {
         songs = json.decode(s); // Decode JSON string into List
       });
@@ -69,7 +72,7 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                 style: TextStyle(fontSize: 30),
               ),
             ),
-             SizedBox(
+            SizedBox(
               height: 20,
             ),
             Container(
@@ -94,23 +97,23 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
               ),
             ),
             // Bcoz everything inside it will be scrollable and so   we used NestedScrollView
-      // Expanded is used as it should cover all the remaining space
+            // Expanded is used as it should cover all the remaining space
             Expanded(
               child: NestedScrollView(
                 controller: _scrollController,
                 headerSliverBuilder: (BuildContext context, bool isScroll) {
                   return [
                     SliverAppBar(
-                      pinned: true,
-                        backgroundColor: Colors.white,
+                      pinned:true,
+                      backgroundColor: Colors.white,
                       bottom: PreferredSize(
-                        preferredSize: Size.fromHeight(50),
+                        preferredSize: Size.fromHeight(45),
                         child: Container(
-                          margin: const EdgeInsets.all(0),
+                          margin: const EdgeInsets.only(bottom: 20),
                           child: TabBar(
                             indicatorPadding: const EdgeInsets.all(0),
                             indicatorSize: TabBarIndicatorSize.label,
-                            labelPadding: const EdgeInsets.all(0),
+                            labelPadding: const EdgeInsets.only(right: 15),
                             controller: _tabController,
                             isScrollable: true,
                             indicator: BoxDecoration(
@@ -124,69 +127,9 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                               ],
                             ),
                             tabs: [
-                              Container(
-                                width: 120,
-                                height: 50,
-                                child: Center(
-                                  child: Text(
-                                    "Tab 1",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.yellow,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      blurRadius: 7,
-                                      offset: Offset(0, 0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 120,
-                                height: 50,
-                                child: Center(
-                                  child: Text(
-                                    "Tab 2",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.red,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      blurRadius: 7,
-                                      offset: Offset(0, 0),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                width: 120,
-                                height: 50,
-                                child: Center(
-                                  child: Text(
-                                    "Tab 3",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.blue,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      blurRadius: 7,
-                                      offset: Offset(0, 0),
-                                    )
-                                  ],
-                                ),
-                              ),
+                              Tabs(color: Colors.yellow, text: "New"),
+                              Tabs(color: Colors.red, text: "Trending"),
+                              Tabs(color: Colors.blue, text: "Popular"),
                             ],
                           ),
                         ),
@@ -198,7 +141,7 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                   controller: _tabController,
                   children: [
                     ListView.builder(
-                      itemCount: 20,
+                      itemCount: 5,
                       itemBuilder: (context, index) => ListTile(
                         leading: CircleAvatar(
                           backgroundColor: Colors.grey,
@@ -207,7 +150,7 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                       ),
                     ),
                     ListView.builder(
-                      itemCount: 20,
+                      itemCount: 10,
                       itemBuilder: (context, index) => ListTile(
                         leading: CircleAvatar(
                           backgroundColor: Colors.grey,
@@ -216,7 +159,7 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                       ),
                     ),
                     ListView.builder(
-                      itemCount: 20,
+                      itemCount: 1,
                       itemBuilder: (context, index) => ListTile(
                         leading: CircleAvatar(
                           backgroundColor: Colors.grey,
