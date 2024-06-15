@@ -17,7 +17,7 @@ class Tabs extends StatelessWidget {
       width: 120,
       height: 50,
       decoration: BoxDecoration(
-        color: color,
+        color: this.color,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
@@ -29,7 +29,7 @@ class Tabs extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          text,
+          this.text,
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,

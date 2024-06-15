@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_ebook_app/tabs.dart';
 
 class Homepage extends StatefulWidget {
@@ -10,8 +14,7 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
-class _HomepageState extends State<Homepage>
-    with SingleTickerProviderStateMixin {
+class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin {
   PageController _pageController = PageController();
 
   List songs = []; // List to hold songs data
@@ -72,15 +75,13 @@ class _HomepageState extends State<Homepage>
                 style: TextStyle(fontSize: 30),
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            SizedBox(height: 20),
             Container(
               child: Container(
                 height: 180,
                 child: PageView.builder(
                   controller: _pageController,
-                  itemCount: songs == null ? 0 : songs.length,
+                  itemCount: songs.isEmpty ? 0 : songs.length,
                   itemBuilder: (_, i) {
                     return Container(
                       margin: const EdgeInsets.symmetric(horizontal: 10),
@@ -96,40 +97,40 @@ class _HomepageState extends State<Homepage>
                 ),
               ),
             ),
-            // Bcoz everything inside it will be scrollable and so   we used NestedScrollView
-            // Expanded is used as it should cover all the remaining space
             Expanded(
               child: NestedScrollView(
                 controller: _scrollController,
                 headerSliverBuilder: (BuildContext context, bool isScroll) {
                   return [
                     SliverAppBar(
-                      pinned:true,
+                      pinned: true,
                       backgroundColor: Colors.white,
                       bottom: PreferredSize(
                         preferredSize: Size.fromHeight(45),
                         child: Container(
-                          margin: const EdgeInsets.only(bottom: 20),
+                          margin: const EdgeInsets.only(
+                            bottom: 20,
+                          ),
                           child: TabBar(
                             indicatorPadding: const EdgeInsets.all(0),
                             indicatorSize: TabBarIndicatorSize.label,
-                            labelPadding: const EdgeInsets.only(right: 15),
+                            labelPadding: const EdgeInsets.only(right: 15, left: 25),
                             controller: _tabController,
                             isScrollable: true,
                             indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  blurRadius: 7,
-                                  offset: Offset(0, 0),
-                                )
-                              ],
+                              borderRadius: BorderRadius.circular(100),
                             ),
                             tabs: [
-                              Tabs(color: Colors.yellow, text: "New"),
-                              Tabs(color: Colors.red, text: "Trending"),
-                              Tabs(color: Colors.blue, text: "Popular"),
+                              Tab(
+                                text: "New",
+                                // Removed the icon as requested
+                              ),
+                              Tab(
+                                text: "Trending",
+                              ),
+                              Tab(
+                                text: "Popular",
+                              ),
                             ],
                           ),
                         ),
@@ -141,13 +142,97 @@ class _HomepageState extends State<Homepage>
                   controller: _tabController,
                   children: [
                     ListView.builder(
-                      itemCount: 5,
-                      itemBuilder: (context, index) => ListTile(
-                        leading: CircleAvatar(
-                          backgroundColor: Colors.grey,
-                        ),
-                        title: Text("Item $index"),
-                      ),
+                      itemCount: songs.isEmpty ? 0 : songs.length,
+                      itemBuilder: (_, index) {
+                        return Container(
+                          margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 2,
+                                  offset: Offset(0, 0),
+                                  color: Colors.grey.withOpacity(0.2),
+                                ),
+                              ],
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 90,
+                                    height: 120,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      image: DecorationImage(
+                                        image: AssetImage(songs[index]["img"]),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Icon(
+                                            Icons.star,
+                                            size: 24,
+                                            color: const Color.fromARGB(255, 255, 230, 88),
+                                          ),
+                                          SizedBox(width: 5),
+                                          Text(
+                                            songs[index]["rating"],
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ],
+                                      ),
+                                      Text(
+                                        songs[index]["title"],
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: 'Avenir',
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        songs[index]["text"],
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: 'Avenir',
+                                          color: Colors.black,
+
+                                        ),
+                                      ),
+                                      Container(
+                                        alignment: Alignment.center,
+                                        width: 60,
+                                        height: 25,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(5),
+                                          color: Colors.blue.shade900
+                                        ),
+                                        child: Text(
+                                       "Love",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontFamily: 'Avenir',
+                                          color: Colors.white,
+                                          
+                                        ),
+                                      ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                     ListView.builder(
                       itemCount: 10,
@@ -159,7 +244,7 @@ class _HomepageState extends State<Homepage>
                       ),
                     ),
                     ListView.builder(
-                      itemCount: 1,
+                      itemCount: 10,
                       itemBuilder: (context, index) => ListTile(
                         leading: CircleAvatar(
                           backgroundColor: Colors.grey,

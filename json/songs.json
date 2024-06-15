@@ -1,23 +1,44 @@
 [
     {
-        "img": "assets/Images/pic-8.png"
+        "img": "assets/Images/pic-8.png",
+        "title": "shantanu",
+        "rating": "4.5",
+        "text":"Hi"
     },
     {
-        "img": "assets/Images/pic-7.png"
+        "img": "assets/Images/pic-7.png",
+        "title": "shantanu",
+        "rating": "4.5",
+        "text":"Hi"
     },
     {
-        "img": "assets/Images/pic-6.png"
+        "img": "assets/Images/pic-6.png",
+        "title": "shantanu",
+        "rating": "4.5",
+        "text":"Hi"
     },
     {
-        "img": "assets/Images/pic-5.png"
+        "img": "assets/Images/pic-5.png",
+        "title": "shantanu",
+        "rating": "4.5",
+        "text":"Hi"
     },
     {
-        "img": "assets/Images/pic-4.png"
+        "img": "assets/Images/pic-4.png",
+        "title": "shantanu",
+        "rating": "4.5",
+        "text":"Hi"
     },
     {
-        "img": "assets/Images/pic-3.png"
+        "img": "assets/Images/pic-3.png",
+        "title": "shantanu",
+        "rating": "4.5",
+        "text":"Hi"
     },
     {
-        "img": "assets/Images/pic-2.png"
+        "img": "assets/Images/pic-2.png",
+        "title": "shantanu",
+        "rating": "4.5",
+        "text":"Hi"
     }
 ]
