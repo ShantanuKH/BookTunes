@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ebook_app/audiofile.dart'; // This should now import 'MyAudiofile'
-import 'package:audioplayers/audioplayers.dart' as audioplayers; // Import 'audioplayers' with a prefix
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_ebook_app/audiofile.dart';  // Import your Audiofile widget
 
 class AudioPage extends StatefulWidget {
   const AudioPage({Key? key}) : super(key: key);
@@ -10,28 +10,61 @@ class AudioPage extends StatefulWidget {
 }
 
 class _AudioPageState extends State<AudioPage> {
-  late audioplayers.AudioPlayer advancedPlayer; // Use the 'audioplayers' prefix here
+  late AudioPlayer advancedPlayer;
 
   @override
   void initState() {
     super.initState();
-    advancedPlayer = audioplayers.AudioPlayer(); // Use the 'audioplayers' prefix here
+    advancedPlayer = AudioPlayer();
   }
 
   @override
   Widget build(BuildContext context) {
-    final double screenheight = MediaQuery.of(context).size.height;
-    final double screenwidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF2F3F8),
       body: Stack(
         children: [
-          // Your existing widget tree
+          // Background color section
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            height: screenHeight/3,
+            child: Container(color: Colors.blue.shade500),
+          ),
+          // App bar section
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: AppBar(
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back_ios),
+                onPressed: () {
+                  // Implement your back button functionality
+                },
+              ),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.search),
+                  onPressed: () {
+                    // Implement your search button functionality
+                  },
+                ),
+              ],
+              backgroundColor: Colors.transparent, // Make app bar transparent
+              elevation: 0.0, // Remove app bar shadow
+            ),
+          ),
+          // Main content section
           Positioned(
             left: 0,
             right: 0,
-            top: screenheight * 0.2,
-            height: screenheight * 0.38,
+            top: screenHeight * 0.2,
+            height: screenHeight * 0.38,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40),
@@ -39,7 +72,7 @@ class _AudioPageState extends State<AudioPage> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: screenheight * 0.1),
+                  SizedBox(height: screenHeight * 0.1),
                   Text(
                     "The Water Cure",
                     style: TextStyle(
@@ -52,10 +85,35 @@ class _AudioPageState extends State<AudioPage> {
                     "Welcome to SK",
                     style: TextStyle(fontSize: 20),
                   ),
-                  Audiofile( // Use MyAudiofile instead of Audiofile
-                    advancedPlayer: advancedPlayer,
-                  ),
+                  Audiofile(advancedPlayer: advancedPlayer), // Use your Audiofile widget here
                 ],
+              ),
+            ),
+          ),
+          // Small box in the middle section
+          Positioned(
+            top: screenHeight * 0.12,
+            left: (screenWidth - 150) / 2,
+            right: (screenWidth - 150) / 2,
+            height: screenHeight * 0.16,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 227, 227, 227),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.white, width: 2),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 5),
+                    image: DecorationImage(
+                      image: AssetImage("assets/Images/pic-1.png"),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

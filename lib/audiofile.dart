@@ -1,5 +1,6 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/widgets.dart';
 
 class Audiofile extends StatefulWidget {
   final AudioPlayer advancedPlayer;
@@ -7,7 +8,7 @@ class Audiofile extends StatefulWidget {
   const Audiofile({Key? key, required this.advancedPlayer}) : super(key: key);
 
   @override
-  State<Audiofile> createState() => _AudiofileState();
+  _AudiofileState createState() => _AudiofileState();
 }
 
 class _AudiofileState extends State<Audiofile> {
@@ -15,6 +16,8 @@ class _AudiofileState extends State<Audiofile> {
   Duration _position = Duration();
   String path = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
   bool isPlaying = false;
+  bool isRepeat = false;
+  bool loop = false;
   List<IconData> _icons = [
     Icons.play_circle_fill,
     Icons.pause_circle_filled,
@@ -23,20 +26,20 @@ class _AudiofileState extends State<Audiofile> {
   @override
   void initState() {
     super.initState();
-    
+
     widget.advancedPlayer.onDurationChanged.listen((Duration d) {
       setState(() {
         _duration = d;
       });
     });
 
-    widget.advancedPlayer.onAudioPositionChanged.listen((Duration p) {
+    widget.advancedPlayer.onPositionChanged.listen((Duration p) {
       setState(() {
         _position = p;
       });
     });
 
-    widget.advancedPlayer.setUrl(path);
+    widget.advancedPlayer.setSourceUrl(Uri.parse(path));
   }
 
   Widget btnStart() {
@@ -61,6 +64,69 @@ class _AudiofileState extends State<Audiofile> {
     );
   }
 
+  Widget btnFast() {
+    return IconButton(
+      icon: ImageIcon(
+        AssetImage('assets/Images/fordward.png'),
+        size: 15,
+        color: Colors.black,
+      ),
+      onPressed: () {
+        this.widget.advancedPlayer.setPlaybackRate(1.5);
+      },
+    );
+  }
+
+  Widget btnSlow() {
+    return IconButton(
+      icon: ImageIcon(
+        AssetImage('assets/Images/backword.png'),
+        size: 15,
+        color: Colors.black,
+      ),
+      onPressed: () {
+        this.widget.advancedPlayer.setPlaybackRate(0.5);
+      },
+    );
+  }
+
+  Widget btnRepeat() {
+    return IconButton(
+      icon: ImageIcon(
+        AssetImage('assets/Images/repeat.png'),
+        size: 15,
+        color: Colors.black,
+      ),
+      onPressed: () {
+        if (isRepeat == false) {
+          this.widget.advancedPlayer.setReleaseMode(ReleaseMode.loop);
+          setState(() {
+            isRepeat == true;
+            color:
+            Colors.blue;
+          });
+        }else if(isRepeat==true){
+          this.widget.advancedPlayer.setReleaseMode(ReleaseMode.release);
+           color:
+            Colors.black;
+        }
+      },
+    );
+  }
+
+  Widget btnloop() {
+    return IconButton(
+      icon: ImageIcon(
+        AssetImage('assets/Images/loop.png'),
+        size: 15,
+        color: Colors.black,
+      ),
+      onPressed: () {
+        this.widget.advancedPlayer.setPlaybackRate(0.5);
+      },
+    );
+  }
+
   Widget loadAsset() {
     return Container(
       child: Row(
@@ -68,6 +134,10 @@ class _AudiofileState extends State<Audiofile> {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           btnStart(),
+          btnFast(),
+          btnSlow(),
+          btnRepeat(),
+          btnloop(),
         ],
       ),
     );
@@ -94,25 +164,26 @@ class _AudiofileState extends State<Audiofile> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: EdgeInsets.all(16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "${_position.inMinutes}:${(_position.inSeconds % 60).toString().padLeft(2, '0')}",
-                  style: TextStyle(fontSize: 16),
-                ),
-                Text(
-                  "${_duration.inMinutes}:${(_duration.inSeconds % 60).toString().padLeft(2, '0')}",
-                  style: TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "${_position.inMinutes}:${(_position.inSeconds % 60).toString().padLeft(2, '0')}",
+                style: TextStyle(fontSize: 16),
+              ),
+              Text(
+                "${_duration.inMinutes}:${(_duration.inSeconds % 60).toString().padLeft(2, '0')}",
+                style: TextStyle(fontSize: 16),
+              ),
+            ],
           ),
+          SizedBox(height: 16),
           loadAsset(),
+          SizedBox(height: 16),
           slider(),
         ],
       ),
