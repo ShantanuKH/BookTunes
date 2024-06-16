@@ -2,9 +2,7 @@ import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_ebook_app/audio_page.dart';
 import 'package:flutter_ebook_app/tabs.dart';
 
 class Homepage extends StatefulWidget {
@@ -17,7 +15,9 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin {
   PageController _pageController = PageController();
 
-  List songs = []; // List to hold songs data
+  List songs = []; 
+  List books = []; 
+  List popularBooks = []; // List to hold songs data
 
   ScrollController _scrollController = ScrollController();
   late TabController _tabController;
@@ -123,7 +123,6 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                             tabs: [
                               Tab(
                                 text: "New",
-                                // Removed the icon as requested
                               ),
                               Tab(
                                 text: "Trending",
@@ -142,92 +141,100 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                   controller: _tabController,
                   children: [
                     ListView.builder(
-                      itemCount: songs.isEmpty ? 0 : songs.length,
-                      itemBuilder: (_, index) {
-                        return Container(
-                          margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
+                      itemCount: books.isEmpty ? 0 : books.length,
+                      itemBuilder: (_, idx) {
+                        return
+                        // To push things to new page we use GestureDetector
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => AudioPage(booksData: books, index: idx)),
+                            );
+                          },
                           child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 2,
-                                  offset: Offset(0, 0),
-                                  color: Colors.grey.withOpacity(0.2),
-                                ),
-                              ],
-                            ),
+                            margin: const EdgeInsets.only(left: 20, right: 20, top: 10, bottom: 10),
                             child: Container(
-                              padding: const EdgeInsets.all(8),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 90,
-                                    height: 120,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        image: AssetImage(songs[index]["img"]),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.star,
-                                            size: 24,
-                                            color: const Color.fromARGB(255, 255, 230, 88),
-                                          ),
-                                          SizedBox(width: 5),
-                                          Text(
-                                            songs[index]["rating"],
-                                            style: TextStyle(color: Colors.red),
-                                          ),
-                                        ],
-                                      ),
-                                      Text(
-                                        songs[index]["title"],
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: 'Avenir',
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      Text(
-                                        songs[index]["text"],
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                          fontFamily: 'Avenir',
-                                          color: Colors.black,
-
-                                        ),
-                                      ),
-                                      Container(
-                                        alignment: Alignment.center,
-                                        width: 60,
-                                        height: 25,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
-                                          color: Colors.blue.shade900
-                                        ),
-                                        child: Text(
-                                       "Love",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: 'Avenir',
-                                          color: Colors.white,
-                                          
-                                        ),
-                                      ),
-                                      )
-                                    ],
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.white,
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 2,
+                                    offset: Offset(0, 0),
+                                    color: Colors.grey.withOpacity(0.2),
                                   ),
                                 ],
+                              ),
+                              child: Container(
+                                padding: const EdgeInsets.all(8),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 90,
+                                      height: 120,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        image: DecorationImage(
+                                          image: AssetImage(songs[idx]["img"]),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.star,
+                                              size: 24,
+                                              color: const Color.fromARGB(255, 255, 230, 88),
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              songs[idx]["rating"],
+                                              style: TextStyle(color: Colors.red),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          songs[idx]["title"],
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontFamily: 'Avenir',
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(
+                                          songs[idx]["text"],
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontFamily: 'Avenir',
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        Container(
+                                          alignment: Alignment.center,
+                                          width: 60,
+                                          height: 25,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            color: Colors.blue.shade900,
+                                          ),
+                                          child: Text(
+                                            "Love",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontFamily: 'Avenir',
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),

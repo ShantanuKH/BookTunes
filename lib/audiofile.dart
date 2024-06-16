@@ -4,8 +4,9 @@ import 'package:flutter/widgets.dart';
 
 class Audiofile extends StatefulWidget {
   final AudioPlayer advancedPlayer;
+  final  audioPath;
 
-  const Audiofile({Key? key, required this.advancedPlayer}) : super(key: key);
+  const Audiofile({Key? key, required this.advancedPlayer , required this.audioPath}) : super(key: key);
 
   @override
   _AudiofileState createState() => _AudiofileState();
@@ -14,7 +15,6 @@ class Audiofile extends StatefulWidget {
 class _AudiofileState extends State<Audiofile> {
   Duration _duration = Duration();
   Duration _position = Duration();
-  String path = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
   bool isPlaying = false;
   bool isRepeat = false;
   bool loop = false;
@@ -39,7 +39,20 @@ class _AudiofileState extends State<Audiofile> {
       });
     });
 
-    widget.advancedPlayer.setSourceUrl(Uri.parse(path));
+    this.widget.advancedPlayer.setSourceUrl(this.widget.audioPath);
+    this.widget.advancedPlayer.onPlayerComplete.listen((event) {
+      setState(() {
+        _position = Duration(seconds: 0);
+
+        if (isRepeat == true) {
+          isPlaying = true;
+        } else {
+          isPlaying = false;
+          isRepeat = false;
+        }
+        ;
+      });
+    });
   }
 
   Widget btnStart() {
@@ -47,7 +60,7 @@ class _AudiofileState extends State<Audiofile> {
       padding: const EdgeInsets.only(bottom: 10),
       onPressed: () {
         if (!isPlaying) {
-          widget.advancedPlayer.play(path);
+          widget.advancedPlayer.play(this.widget.audioPath);
           setState(() {
             isPlaying = true;
           });
@@ -105,10 +118,11 @@ class _AudiofileState extends State<Audiofile> {
             color:
             Colors.blue;
           });
-        }else if(isRepeat==true){
+        } else if (isRepeat == true) {
           this.widget.advancedPlayer.setReleaseMode(ReleaseMode.release);
-           color:
-            Colors.black;
+          color:
+          Colors.black;
+          isRepeat = false;
         }
       },
     );

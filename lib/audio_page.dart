@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:flutter_ebook_app/audiofile.dart';  // Import your Audiofile widget
+import 'package:flutter_ebook_app/audiofile.dart'; // Import your Audiofile widget
 
 class AudioPage extends StatefulWidget {
-  const AudioPage({Key? key}) : super(key: key);
+  final booksData;
+  final int index;
+  const AudioPage({Key? key, this.booksData, required this.index})
+      : super(key: key);
 
   @override
   State<AudioPage> createState() => _AudioPageState();
@@ -32,7 +35,7 @@ class _AudioPageState extends State<AudioPage> {
             top: 0,
             left: 0,
             right: 0,
-            height: screenHeight/3,
+            height: screenHeight / 3,
             child: Container(color: Colors.blue.shade500),
           ),
           // App bar section
@@ -44,7 +47,8 @@ class _AudioPageState extends State<AudioPage> {
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back_ios),
                 onPressed: () {
-                  // Implement your back button functionality
+                  advancedPlayer.stop();
+                  Navigator.of(context).pop();
                 },
               ),
               actions: [
@@ -74,7 +78,7 @@ class _AudioPageState extends State<AudioPage> {
                 children: [
                   SizedBox(height: screenHeight * 0.1),
                   Text(
-                    "The Water Cure",
+                    this.widget.booksData[this.widget.index]["title"],
                     style: TextStyle(
                       fontSize: 30,
                       fontFamily: "Avenir",
@@ -82,10 +86,14 @@ class _AudioPageState extends State<AudioPage> {
                     ),
                   ),
                   Text(
-                    "Welcome to SK",
+                    this.widget.booksData[this.widget.index]["text"],
                     style: TextStyle(fontSize: 20),
                   ),
-                  Audiofile(advancedPlayer: advancedPlayer), // Use your Audiofile widget here
+                  Audiofile(
+                    advancedPlayer: advancedPlayer,
+                    audioPath: this.widget.booksData[this.widget.index]
+                        ["audio"],
+                  ), // Use your Audiofile widget here
                 ],
               ),
             ),
@@ -109,7 +117,9 @@ class _AudioPageState extends State<AudioPage> {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 5),
                     image: DecorationImage(
-                      image: AssetImage("assets/Images/pic-1.png"),
+                      image: AssetImage(
+                        this.widget.booksData[this.widget.index]["img"],
+                      ),
                       fit: BoxFit.cover,
                     ),
                   ),
