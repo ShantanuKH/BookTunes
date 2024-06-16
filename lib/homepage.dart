@@ -15,9 +15,9 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin {
   PageController _pageController = PageController();
 
-  List songs = []; 
+  // List songs = []; 
   List books = []; 
-  List popularBooks = []; // List to hold songs data
+  List popularBooks = []; 
 
   ScrollController _scrollController = ScrollController();
   late TabController _tabController;
@@ -27,7 +27,7 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
         .loadString("json/songs.json")
         .then((s) {
       setState(() {
-        songs = json.decode(s); // Decode JSON string into List
+        books = json.decode(s); // Decode JSON string into List
       });
     });
   }
@@ -81,14 +81,14 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                 height: 180,
                 child: PageView.builder(
                   controller: _pageController,
-                  itemCount: songs.isEmpty ? 0 : songs.length,
+                  itemCount: popularBooks.isEmpty ? 0 : popularBooks.length,
                   itemBuilder: (_, i) {
                     return Container(
                       margin: const EdgeInsets.symmetric(horizontal: 10),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         image: DecorationImage(
-                          image: AssetImage(songs[i]["img"]),
+                          image: AssetImage(popularBooks[i]["img"]),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -176,7 +176,7 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
-                                          image: AssetImage(songs[idx]["img"]),
+                                          image: AssetImage(books[idx]["img"]),
                                         ),
                                       ),
                                     ),
@@ -193,13 +193,13 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                                             ),
                                             SizedBox(width: 5),
                                             Text(
-                                              songs[idx]["rating"],
+                                              books[idx]["rating"],
                                               style: TextStyle(color: Colors.red),
                                             ),
                                           ],
                                         ),
                                         Text(
-                                          songs[idx]["title"],
+                                          books[idx]["title"],
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontFamily: 'Avenir',
@@ -207,7 +207,7 @@ class _HomepageState extends State<Homepage> with SingleTickerProviderStateMixin
                                           ),
                                         ),
                                         Text(
-                                          songs[idx]["text"],
+                                          books[idx]["text"],
                                           style: TextStyle(
                                             fontSize: 18,
                                             fontFamily: 'Avenir',
