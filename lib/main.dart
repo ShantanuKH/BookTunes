@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ebook_app/audio_page.dart';
 import 'package:flutter_ebook_app/homepage.dart';
 
 void main() {
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const Homepage(),
+      home: const AudioPage(),
     );
   }
 }
